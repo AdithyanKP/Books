@@ -5,15 +5,15 @@ Books app
 
 ## Technologies Used
 
-- **Frontend**: React,Vite,Tailwind CSS
-- **Backend**: Node.js, Express ,Psql ,Prisma
+- **frontend**: React,Vite,Tailwind CSS
+- **backend**: Node.js, Express ,Psql ,Prisma
 
-### Backend
+### backend
 
 1. **Clone the repository**:
    ```bash
    git clone <https://github.com/AdithyanKP/Books.git>
-   cd Backend
+   cd backend
   
 2. **Install Dependancies**:
    ```bash
@@ -21,18 +21,18 @@ Books app
   
 3. **Build Application**:
    ```bash
-  npm run build
-
+   npm run build
+   
 4. **Run Application**:
    ```bash
    npm run start
    
- ### Frontend
+ ### frontend
 
 1. **Clone the repository**:
    ```bash
    git clone <https://github.com/AdithyanKP/Books.git>
-   cd Frontend
+   cd frontend
   
 2. **Install Dependancies**:
    ```bash
