@@ -76,3 +76,7 @@ Books app
 3. **Run Application**:
    ```bash
    npm run dev
+
+4. **View Application**:
+  
+    Hit http://localhost:5173/ on your browser.
