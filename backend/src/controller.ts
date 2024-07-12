@@ -1,17 +1,20 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import validateBody from "./validations/index.js";
+import moment from "moment";
 
 const prisma = new PrismaClient();
 
 export const addBooks = async (req: Request, res: Response) => {
   await validateBody(req.body, "addBookSchema");
+  let publishDate = moment(req.body.published);
+  let isoDate = publishDate.toISOString();
 
   let data = {
     name: req.body.name,
     description: req.body.description,
-    publish_date: req.body.publish_date,
-    price: req.body.price,
+    publish_date: isoDate,
+    price: parseInt(req.body.price),
   };
 
   const newBook = await prisma.books.create({
@@ -32,24 +35,24 @@ export const listBooks = async (req: Request, res: Response) => {
   const booksCount = await prisma.$queryRaw`SELECT COUNT(*) as total FROM (
       SELECT 
       *
-      FROM books as b
-      WHERE  c.name ILIKE ${searchValue}
-       OR c.description ILIKE ${searchValue}
+      FROM "Books" as b
+      WHERE b.name ILIKE ${searchValue}
+      OR b.description ILIKE ${searchValue}
   ) as subquery;
   `;
 
   const booksInfo = await prisma.$queryRaw`
       SELECT 
       *
-      FROM books as c
-      WHERE c.name ILIKE ${searchValue}
-      OR c.description ILIKE ${searchValue}
+      FROM "Books" as b
+      WHERE b.name ILIKE ${searchValue}
+      OR b.description ILIKE ${searchValue}
       LIMIT ${limit} 
       OFFSET ${offset};`;
 
   res.status(200).json({
     data: booksInfo,
-    count: booksCount,
+    count: booksCount[0]?.total.toString(),
     message: "Books retirved successfully",
   });
 };

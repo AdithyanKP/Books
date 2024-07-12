@@ -1,11 +1,11 @@
-import express from 'express';
-import pkg from 'body-parser';
-import { PrismaClient } from '@prisma/client';
-import routes from './routes.js';
+import express from "express";
+import pkg from "body-parser";
+import routes from "./routes.js";
+import cors from "cors";
 const app = express();
-const prisma = new PrismaClient();
 const { json, urlencoded } = pkg;
+app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use('/api', routes);
+app.use("/api", routes);
 export default app;

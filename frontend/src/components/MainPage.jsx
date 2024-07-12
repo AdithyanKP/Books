@@ -13,7 +13,7 @@ const MainPage = () => {
   const [search, setSearch] = useState("");
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(2);
   const [showAddBookModal, setShowAddBookModal] = useState(false);
   const [newBook, setNewBook] = useState({
     name: "",
@@ -26,17 +26,30 @@ const MainPage = () => {
     fetchBooks();
   }, [currentPage, search]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  const modalCloseHandle = () => {
+    setShowAddBookModal(false);
+    setNewBook({
+      name: "",
+      description: "",
+      published: new Date(),
+      price: "",
+    });
+  };
+
   const fetchBooks = async () => {
-    console.log("here we go");
     let reqBody = {
       page_number: currentPage,
       search: search,
-      limit: 10,
+      limit: 2,
     };
     try {
       const response = await axios.post(`${BASE_URL}list-books`, reqBody);
-      setBooks(response.data);
-      setTotalItems(response.count);
+      setBooks(response?.data?.data);
+      setTotalItems(response.data?.count);
     } catch (error) {
       console.error("Error fetching Books:", error);
     }
@@ -56,6 +69,12 @@ const MainPage = () => {
       });
       fetchBooks();
       setShowAddBookModal(false);
+      setNewBook({
+        name: "",
+        description: "",
+        published: new Date(),
+        price: "",
+      });
     } catch (error) {
       console.error("Error saving book:", error);
     }
@@ -88,22 +107,26 @@ const MainPage = () => {
         ></textarea>
       </div>
       <ul className="bg-white rounded-lg shadow-md">
-        {books.map((item) => (
+        {books?.map((item) => (
           <li
             key={item.id}
             className="border-b border-gray-200 last:border-b-0"
           >
             <div className="p-4">
               <div className="mb-2">
+                <p className="text-lg font-semibold">Name</p>
                 <p className="text-lg font-semibold">{item?.name}</p>
               </div>
               <div className="mb-2">
+                <p className="text-lg font-semibold">Description</p>
                 <p className="text-gray-700">{item?.description}</p>
               </div>
               <div className="mb-2">
-                <p className="text-gray-500">{item?.published}</p>
+                <p className="text-lg font-semibold">Published</p>
+                <p className="text-gray-500">{item?.publish_date}</p>
               </div>
               <div>
+                <p className="text-lg font-semibold">Price</p>
                 <p className="text-gray-800 font-medium">${item?.price}</p>
               </div>
             </div>
@@ -116,10 +139,9 @@ const MainPage = () => {
         paginate={paginate}
         className="mt-6"
       />
-
       <Modal
         isOpen={showAddBookModal}
-        onRequestClose={() => setShowAddBookModal(false)}
+        onRequestClose={() => modalCloseHandle()}
         contentLabel="Add Book Modal"
         className="fixed inset-0 flex items-center justify-center z-50"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"

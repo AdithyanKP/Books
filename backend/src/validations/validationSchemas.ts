@@ -1,9 +1,9 @@
 import vine from "@vinejs/vine";
 
-const addBook = vine.object({
+const addBookSchema = vine.object({
   name: vine.string(),
   description: vine.string(),
-  publish_date: vine.date(),
+  published: vine.date(),
   price: vine.number(),
 });
 
@@ -14,6 +14,6 @@ const listBookSchema = vine.object({
 });
 
 export default {
-  addBook,
+  addBookSchema,
   listBookSchema,
 };

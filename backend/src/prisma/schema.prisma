@@ -11,7 +11,8 @@ datasource db {
 
 model Books {
   id           Int      @id @default(autoincrement())
-  description  String   @unique
+  name         String
+  description  String  
   publish_date DateTime
   price        Int
   createdAt    DateTime @default(now())
